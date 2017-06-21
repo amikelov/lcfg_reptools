@@ -1,0 +1,21 @@
+Healthy_N254, Healthy, Untreated	36-74 mean 51	SRR901229
+Healthy_N253, Healthy, Untreated	36-74 mean 51	SRR901225
+Healthy_N252, Healthy, Untreated	36-74 mean 51	SRR901221
+Healthy_N250, Healthy, Untreated	36-74 mean 51	SRR901217
+Healthy_N248, Healthy, Untreated	36-74 mean 51	SRR901213
+Disease_K9, Nonlesion, Untreated	45	SRR901209
+Disease_K9, Lesion, Untreated	45	SRR901205
+Disease_K8, Nonlesion, Untreated	60	SRR901201
+Disease_K8, Lesion, Untreated	60	SRR901197
+Disease_K6, Nonlesion, Untreated	56	SRR901193
+Disease_K6, Lesion, Untreated	56	SRR901189
+Disease_K5, Nonlesion, Untreated	30	SRR901185
+Disease_K5, Lesion, Untreated	30	SRR901181
+Disease_K4, Nonlesion, Untreated	56	SRR901177
+Disease_K4, Lesion, Untreated	56	SRR901173
+Disease_K3, Nonlesion, Untreated	63	SRR901169
+Disease_K3, Lesion, Untreated	63	SRR901165
+Disease_K2, Nonlesion, Untreated	52	SRR901161
+Disease_K2, Lesion, Untreated	52	SRR901157
+Disease_K1, Nonlesion, Untreated	56	SRR1382100
+Disease_K1, Lesion, Untreated	56	SRR901149

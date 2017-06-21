@@ -1,17 +1,21 @@
-repGrep <- function(cls_list,tgs) {
+getCdrs<-function(cls_list)melt(lapply(cls_list,"[[",6))
+
+repGrep <- function(cls_list,tgs, nsubs) {
   
-  melted<- melt(lapply(cls_list,"[[",6))
+  melted<- getCdrs(cls_list)
   if (missing(tgs)) tgs <- as.character(melted[,1])
-  
-  
+  if (missing(nsubs)) nsubs <-1
   match.list <- sapply(tgs,
                        FUN = function(x){
                          agrep(pattern =x,
                                x= melted[,1],
                                value = F,
-                               max = list(cost=1, all=1, sub=1, del =0,ins=0))
+                               max = list(cost=1, all=1, sub=nsubs, del =0,ins=0)
+                               )
                        }
   )
+  
+  match.list<-match.list[sapply(match.list,length)>1]
   melted.match.list<-melt(match.list)
   colnames(melted.match.list)[1]<-"match_cdr_num"
   colnames(melted.match.list)[2]<-"target_cdr"
@@ -26,13 +30,13 @@ repGrep <- function(cls_list,tgs) {
 }
 
 
-grep.counts<-function(cls_list,tgs,mod){
+shared.counts<-function(cls_list,tgs,nsubs,mod){
   if(missing(mod)) mod <-"samples"
-  
+  if(missing(nsubs)) nsubs<-1
   if(missing(tgs)){
-    melted.match.list<-repGrep(cls_list)
+    melted.match.list<-repGrep(cls_list,nsubs=nsubs)
   } else {
-    melted.match.list<-repGrep(cls_list,tgs)
+    melted.match.list<-repGrep(cls_list,tgs,nsubs=nsubs)
   }
   
   if (mod=="samples"){
