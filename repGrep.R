@@ -1,28 +1,46 @@
+library(tcR)
+library(reshape2)
+library(parallel)
+
 getCdrs<-function(cls_list) melt(lapply(cls_list,"[",c(4,5,6,7,8)))
 
 repGrep <- function(cls_list,tgs, nsubs = 1, minlen = 6,V = "family") {
 
   melted<- getCdrs(cls_list)
   melted<- melted[,c(2,7,1,3,4,6)]
-  if (missing(tgs)) {tgs <- melted[,c(grep("CDR3.amino.acid.sequence", colnames(melted)),grep("V.gene", colnames(melted))) ]
+  
+  self<- F
+  
+  if (missing(tgs)) {
+    tgs <- melted[,c(grep("CDR3.amino.acid.sequence", colnames(melted)),grep("V.gene", colnames(melted))) ]
+    self<-T
   } else colnames(tgs)<-c ("CDR3.amino.acid.sequence","V.gene")
+  
   tgs<-tgs[ nchar(tgs[,1]) > minlen,]
       
   i<- 0
   
-  match.list <- sapply(tgs$CDR3.amino.acid.sequence,
-                       FUN = function(x){
+  no_cores <- detectCores() - 1
+  cl <- makeCluster(no_cores)
+ 
+  print(dim(tgs))
+  
+  match.list <- parSapply(cl = cl,
+                          tgs$CDR3.amino.acid.sequence,
+                          FUN = function(x){
                           i<<-i+1
                           
                           ind <-  agrep(pattern =x,                      #ищем индексы строк, совпадающих по аа сиквенсу с nsubs замен
                                x= as.character(melted[,1]),
                                value = F,
                                max = list(cost=1, all=1, sub=nsubs, del =0,ins=0) )
-                              
+                          
+                          #if (self) ind<-ind[ind!=i]    
+                          
+                          
                           
                             if  ( V == "family"| V == "exact" ) {         #сравниваем по V гену если указаны соотв. аргументы
-                              if (length(ind)>1) {
-                                V.genes <- unlist(strsplit(tgs$V.gene[i],", "))     
+                              V.genes <- unlist(strsplit(tgs$V.gene[i],", "))     
                                 
                                 if (V == "family")  V.genes <- sapply(V.genes,               #если нужно, обрезаем V ген до семейства
                                                                        function(x){substr(x, 
@@ -31,20 +49,15 @@ repGrep <- function(cls_list,tgs, nsubs = 1, minlen = 6,V = "family") {
                                                                          }
                                                                       )
                                 
-                              m <- sapply(V.genes,                                    # ищем для 
+                              m <- sapply(V.genes,                                    # ищем каждый из V.genes хотя бы одно пересечение среди V генов мэтча 
                                           function(x) grepl(pattern = x,                   
                                                             x = melted$V.gene[ind]))
                               ind<-ind[apply(m,1,FUN = any)]
-                                
-                              } 
                             } else return(ind)
                         
-                          
-                          
-                        
-                        
-                       }
+                          }
   )
+  stopCluster(cl)
   match.list<-match.list[sapply(match.list,length)>1]
   melted.match.list<-melt(match.list)
   if (nrow(melted.match.list)==0) melted.match.list$target_cdr <- character(0)
