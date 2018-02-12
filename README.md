@@ -11,11 +11,11 @@ mixcr_TRB is a simple R wrapper function for MIXCR (Milaboratory) for standard p
  *samples*          -    character string, path to a tab-delimited metafile. Headers are required, columns id, R1, R2 are mandatory.
                            Can also take a data.frame as input.
                            
-                          | id            | R1                   | R2                   | Any_optional_featute|
-                          | ------------- |:--------------------:| --------------------:|--------------------:|
-                          | Sample_X      | /data/SX_R1.fastq.gz | /data/SX_R2.fastq.gz |        Healthy      |
-                          | Sample_Y      | /data/SX_R1.fastq.gz | /data/SX_R2.fastq.gz |          AS         |
-                          | Sample_5      |        ...           |         ...          |          ...        |
+| id            | R1                   | R2                   | Any_optional_features|
+| ------------- |:--------------------:| :-------------------:|:-------------------:|
+| Sample_X      | /data/SX_R1.fastq.gz | /data/SX_R2.fastq.gz |        Healthy      |
+| Sample_Y      | /data/SX_R1.fastq.gz | /data/SX_R2.fastq.gz |          AS         |
+| Sample_5      |        ...           |         ...          |          ...        |
       
       
  *outputFolder*         -   path to outputFolder
